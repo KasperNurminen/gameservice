@@ -12,14 +12,14 @@ We will implement a Django authentication with email validation using Django’s
 __Basic player functionalities:__
 Every user who has the role of player is able to purchase games from the course’s mockup payment service. Players are also able to play the purchased games, but not any non-purchased titles. 
  
-Players are able to find games via a search (by at least name) or via a category that the developer decided. A game must have exactly one category. The search can also filter by games that the player own, so that no non-purchased titles are visible.
+Players are able to find games via a search (by at least name) or via a category that the developer decided. A game must have exactly one category. The search can also filter by games that the player own, so that no non-purchased titles are visible. The filter can use the payments-model and filter it by player. 
  
 __Basic developer functionalities:__
 A developer can add and edit their titles from the same view. The functionalities are the same, only the texts are different with editing and creating new. A developer also has a “my games” -view, which displayes sales statistics and game inventory for each game. Game-model has a developer-attribute, so that each game knows who is allowed to edit or remove the game and who isn’t.
  
 __Game/service interaction:__
 When player has finished playing a game (or presses submit score), the game sends a postMessage to the parent window containing the current score. This score is saved to the Score-model. The highscores are displayed on the same page as the game. A player can view their personal high scores from their own profile page. The scores are transmitted using postMessage.
- 
+  
 __Save/load and resolution feature:__
 The service supports saving and loading for games with the simple message protocol described in Game Developer Information. A saved game data is saved to the savedata-object. Each time a game sends the LOAD_REQUEST -message, the service checks whether a save data exists. If it does, it sends the save data to the game. The game can also send the SETTINGS-command, which for example sets the resolution. This is not saved to the service, as the game should send the command each time it has loaded.
  
@@ -34,7 +34,7 @@ We are planning to create a mobile-friendly game service. It should work on all 
 We will (initially) use these models:
 
 __User__
-The users are extended from django.contrib.auth.user. Each user can have 2 possible groups: Developer and player. Each group has their own set of permissions. Therefore we only need to specify the group when creating a new user, and the permissions will be handled automatically.
+The users are extended from django.contrib.auth.user. Each user can have 2 possible groups: developer and player. Each group has their own set of permissions. Therefore we only need to specify the group when creating a new user, and the permissions will then be handled automatically.
 
 We use the following fields:
 * username
@@ -55,7 +55,10 @@ A game object holds all the relevant information about a game title.
 It has the following fields:
 * title: Charfield
 * developer: OneToOneField(User)
-* price:  IntegerField (saved as cents)
+* price:  DecimalField 
+* url: URLField
+
+The prices are saved as DecimalFields to prevent floating point errors. We don't want any cents to go missing because of our lousy programming.
 
 __Savedata__
 A player might play a game a bit, and return to it later. Therefore a game can save it’s progress and we need a model for that. This model has the following fields:
@@ -67,7 +70,7 @@ __Payment:__
 We use https://tilkkutakki.cs.aalto.fi/payments/ as a payment processor. Sid and pid are required in tilkkutäkki. Pid is our own identifier for a payment, and sid is calculated from the username.
 
 * player:  OneToOneField(User)
-* price:  IntegerField (saved as cents)
+* price:  DecimalField
 * game:  OneToOneField(Game)
 * sid: Charfield
 * pid: Charfield
@@ -84,9 +87,11 @@ __Project schedule__
 * 10.12-20.12.2019 project planning
 * 2.1.2020 ->  implementation
 	*  weekly meetings
+* initial heroku deployment goal by 1.2.2020
+* release testing up until 13.2.2020
 * 14.2.2020 final submission deadline
 
-
+Unit tests are created for critical business functionality alongside coding, whenever we feel the need.
 
 
 
