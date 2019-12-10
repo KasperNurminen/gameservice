@@ -46,15 +46,15 @@ We use the following fields:
 __Score__
 A score object relates a numerical score with a game and a player. It has the following fields:
 
-* player:  OneToOneField(User)
+* player:  ForeignKey(User)
 * score:  IntegerField
-* game:  OneToOneField(Game)
+* game:  ForeignKey(Game)
 
 __Game__
 A game object holds all the relevant information about a game title.
 It has the following fields:
 * title: Charfield
-* developer: OneToOneField(User)
+* developer: ForeignKey(User)
 * price:  DecimalField 
 * url: URLField
 
@@ -62,16 +62,16 @@ The prices are saved as DecimalFields to prevent floating point errors. We don't
 
 __Savedata__
 A player might play a game a bit, and return to it later. Therefore a game can save it’s progress and we need a model for that. This model has the following fields:
-* player:  OneToOneField(User)
+* player:  ForeignKey(User)
 * data:  JSONField
-* game:  OneToOneField(Game)
+* game:  ForeignKey(Game)
 
 __Payment:__
 We use https://tilkkutakki.cs.aalto.fi/payments/ as a payment processor. Sid and pid are required in tilkkutäkki. Pid is our own identifier for a payment, and sid is calculated from the username.
 
-* player:  OneToOneField(User)
+* player:  ForeignKey(User)
 * price:  DecimalField
-* game:  OneToOneField(Game)
+* game:  ForeignKey(Game)
 * sid: Charfield
 * pid: Charfield
 
