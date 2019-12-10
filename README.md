@@ -75,6 +75,30 @@ We use https://tilkkutakki.cs.aalto.fi/payments/ as a payment processor. Sid and
 * sid: Charfield
 * pid: Charfield
 
+### Initial view proposal
+
+* Login   
+    *  login
+    *  register
+* "main view"
+    *  search and purchase games
+    * filter to show only purchased
+    * text search and category filtering
+* Game view 
+    * playing each game
+    * saving and loading data
+    * high scores
+
+* Developer inventory
+    * list of developer's games, sales information and edit and remove buttons
+    * Add/edit game
+    * possibility to modify name, price, url
+* Profile
+    * name
+    * high scores for all games
+    * payment history
+
+
 ### Project management
 
 We are planning on meeting weekly and using Trello (or similar) for a Kanban-like workflow. We create issues, assign them to project members and complete them one by one. We will also use good git practices - all development is done in feature branches, and the changes are merged to master only after a team member has reviewed the changes. We will try to create as many tests as we think is necessary.
