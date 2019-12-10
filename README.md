@@ -39,6 +39,7 @@ The users are extended from django.contrib.auth.user. Each user can have 2 possi
 We use the following fields:
 * username
 * password
+* email
 * groups
 * first_name
 * last_name
@@ -63,8 +64,10 @@ The prices are saved as DecimalFields to prevent floating point errors. We don't
 __Savedata__
 A player might play a game a bit, and return to it later. Therefore a game can save it’s progress and we need a model for that. This model has the following fields:
 * player:  ForeignKey(User)
-* data:  JSONField
+* data:  Charfield
 * game:  ForeignKey(Game)
+
+Data is saved as a string, as it is not useful for django to store it as JSON.
 
 __Payment:__
 We use https://tilkkutakki.cs.aalto.fi/payments/ as a payment processor. Sid and pid are required in tilkkutäkki. Pid is our own identifier for a payment, and sid is calculated from the username.
