@@ -1,8 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
+from django.contrib.contenttypes.models import ContentType
 
 class Game(models.Model):
-    title = models.CharField(max_length = 255)
+    title = models.CharField(max_length = 254)
     developer = models.ForeignKey(
         User,
         on_delete=models.CASCADE
@@ -44,3 +45,4 @@ class Payment(models.Model):
     )
     pid = models.CharField(max_length=64)
     sid = models.CharField(max_length=128)
+
