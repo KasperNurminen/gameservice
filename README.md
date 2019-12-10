@@ -80,10 +80,12 @@ We use https://tilkkutakki.cs.aalto.fi/payments/ as a payment processor. Sid and
 * Login   
     *  login
     *  register
-* "main view"
+
+* "Main view"
     *  search and purchase games
     * filter to show only purchased
     * text search and category filtering
+
 * Game view 
     * playing each game
     * saving and loading data
@@ -93,6 +95,7 @@ We use https://tilkkutakki.cs.aalto.fi/payments/ as a payment processor. Sid and
     * list of developer's games, sales information and edit and remove buttons
     * Add/edit game
     * possibility to modify name, price, url
+	
 * Profile
     * name
     * high scores for all games
