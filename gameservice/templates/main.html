@@ -28,13 +28,20 @@
                     <th>Developer</th> 
                     <th>Price</th>
                     <th>Categories</th>
+                    <th>Purchase</th>
                 </tr>
                 {% for game in results %}
-                    <tr class="table-row" data-href="{% url 'game' game.pk %}">
+                    <tr {% if game.owned %} class="table-row" data-href="{% url 'game' game.pk %}" {% endif %}>
                     <td>{{ game.title }}</td> 
                     <td>{{ game.developer }}</td> 
                     <td>{{ game.price }} €</td>
                     <td>{{game.categories.all|join:", "}}</td>
+                    <td>
+                    {% if game.owned %}
+                    Already owned
+                    {% else %}
+                    <button onclick="purchaseTitle(event, {{game.pk}})">Purchase</td>
+                    {% endif %}
                 {% endfor %}
                 </table>
             {% else %}
@@ -47,6 +54,7 @@
 
 <script type="text/javascript" src="{% static 'js/bootstrap-multiselect.js' %}"></script>
 <link rel="stylesheet" href="{% static 'css/bootstrap-multiselect.css' %}" type="text/css"/>
+<script src="{% static 'js/main.js' %}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         var values = {{selected_categories|safe}}
@@ -54,7 +62,11 @@
             nonSelectedText: 'Filter by category',
             buttonWidth: "200px",
         }).multiselect('select', values);
-    });
+    });    
+    var purchaseTitle = function (event, pk) {
+        alert("Should purchase game with id " + pk)
+        event.stopPropagation()
+    }
 </script>
 {% endblock %}
 

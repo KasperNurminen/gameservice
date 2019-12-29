@@ -57,7 +57,7 @@ class Payment(models.Model):
         User,
         on_delete=models.CASCADE
     )
-    price = models.DecimalField(max_digits=2, decimal_places=2)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
     game = models.ForeignKey(
         Game,
         on_delete=models.CASCADE
