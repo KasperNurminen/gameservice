@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% block content %}
 <div class="row">
     <div class="col">
         <h1>Search games</h1>
         <form type="get" action="." style="margin: 0">
             <input  id="search" type="text" name="search" value="{{query}}" placeholder="Search..." >
+            <select id="categories" name="categories[]" multiple="multiple">
+                  {% for category in categories %}
+                <option value="{{category}}">{{category}}</option>
+                    {% endfor %}
+             
+            </select>
             <button id="search_submit" type="submit" >Submit</button>
         </form>
     </div>
@@ -20,12 +27,14 @@
                     <th>Title</th>
                     <th>Developer</th> 
                     <th>Price</th>
+                    <th>Categories</th>
                 </tr>
                 {% for game in results %}
                     <tr class="table-row" data-href="{% url 'game' game.pk %}">
                     <td>{{ game.title }}</td> 
                     <td>{{ game.developer }}</td> 
                     <td>{{ game.price }} €</td>
+                    <td>{{game.categories.all|join:", "}}</td>
                 {% endfor %}
                 </table>
             {% else %}
@@ -34,6 +43,19 @@
         {% endif %}
     </div>
 </div>
+
+
+<script type="text/javascript" src="{% static 'js/bootstrap-multiselect.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/bootstrap-multiselect.css' %}" type="text/css"/>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var values = {{selected_categories|safe}}
+        $('#categories').multiselect({
+            nonSelectedText: 'Filter by category',
+            buttonWidth: "200px",
+        }).multiselect('select', values);
+    });
+</script>
 {% endblock %}
 
     
