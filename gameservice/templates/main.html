@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h1>Search games</h1>
+        <form type="get" action="." style="margin: 0">
+            <input  id="search" type="text" name="search" value="{{query}}" placeholder="Search..." >
+            <button id="search_submit" type="submit" >Submit</button>
+        </form>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        {% if searched %}
+            {% if results %}
+                <table class="table table-striped table-hover">
+                <tr >
+                    <th>Title</th>
+                    <th>Developer</th> 
+                    <th>Price</th>
+                </tr>
+                {% for game in results %}
+                    <tr class="table-row" data-href="{% url 'game' game.pk %}">
+                    <td>{{ game.title }}</td> 
+                    <td>{{ game.developer }}</td> 
+                    <td>{{ game.price }} €</td>
+                {% endfor %}
+                </table>
+            {% else %}
+            <p> No results</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+    
