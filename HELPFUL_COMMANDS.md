@@ -12,3 +12,8 @@ testipeli.save()
 Game.objects.get(title="Testipeli").delete()
 User.objects.get(username="testi").delete()
 ```
+
+## Superuser creation
+```
+python manage.py createsuperuser
+```
