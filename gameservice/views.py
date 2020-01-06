@@ -14,27 +14,26 @@ class Main(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         context = {}
-        query = request.GET.get('search', False)
+        query = request.GET.get('search', "")
         categories = request.GET.getlist('categories[]', [])
-        if query != False or categories:
-            objects = Game.objects.filter(title__contains=query)
-            if categories:  # handle category filtering
-                for category in categories:
-                    for game in objects:
-                        if not category in [x.name for x in game.categories.all()]:
-                            objects = objects.difference(
-                                Game.objects.filter(pk=game.pk))
-            for game in objects:  # check whether already owned
-                game.owned = Payment.objects.filter(
-                    game__pk=game.pk).first() or False  # when user implemented, add here
+        objects = Game.objects.filter(title__contains=query)
+        if categories:  # handle category filtering
+            for category in categories:
+                for game in objects:
+                    if not category in [x.name for x in game.categories.all()]:
+                        objects = objects.difference(
+                            Game.objects.filter(pk=game.pk))
+        for game in objects:  # check whether already owned
+            game.owned = Payment.objects.filter(
+                game__pk=game.pk, user__pk=request.user.pk).first() or False  # when user implemented, add here
 
-            context = {
-                'searched': True,
-                'results': objects,
-                'query': query,
-                'selected_categories': categories,
-                "categories": Category.objects.all()
-            }
+        context = {
+            'searched': True,
+            'results': objects,
+            'query': query,
+            'selected_categories': categories,
+            "categories": Category.objects.all()
+        }
         return render(request, "main.html", context=context)
 
 
