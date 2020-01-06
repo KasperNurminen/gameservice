@@ -1,9 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import View
 from .models import Game, Category, Payment
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
+from .forms import RegisterForm
+from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+import json
 
 
-class Main(View):
+class Main(LoginRequiredMixin, View):
+    login_url = '/login/'
+
     def get(self, request, *args, **kwargs):
         context = {}
         query = request.GET.get('search', False)
@@ -30,9 +38,27 @@ class Main(View):
         return render(request, "main.html", context=context)
 
 
-class GameDetail(View):
+class GameDetail(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request, id, *args, **kwargs):
 
         game = Game.objects.get(pk=id)
         context = {'game': game}
         return render(request, "game.html", context=context)
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('/')
+        else:
+            print("Form has errors")
+    else:
+        form = RegisterForm()
+    return render(request, 'register.html', {'form': form})
