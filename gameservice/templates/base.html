@@ -10,6 +10,9 @@
   <body>
     <div class="page-header">
         <h1><a href="/">Game Service</a></h1>
+        <div>
+            <p> You are logged as {{request.user.username}} </p> <a href="/logout"> Log out </a>
+        </div>
     </div>
     <div class="content container">
             {% block content %}
