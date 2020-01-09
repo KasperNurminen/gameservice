@@ -16,16 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from django.conf.urls import url
-from gameservice.views import Main, GameDetail
-from gameservice import views
+from gameservice.views import Main, GameDetail, Register, Developer, DeveloperEdit, DeveloperCreate, DeveloperDelete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("django.contrib.auth.urls")),
     path('', Main.as_view(), name="main"),
     path('game/<int:id>', GameDetail.as_view(), name="game"),
-    path('register/', views.register, name="register"),
+    path('register/', Register.as_view(), name="register"),
+    path('developer/<int:pk>', DeveloperEdit.as_view(), name="developer-edit"),
+    path('developer/', Developer.as_view(), name='developer'),
+    path('developer/new', DeveloperCreate.as_view(), name="developer-create"),
+    path('developer/delete/<int:pk>', DeveloperDelete.as_view(), name="developer-delete"),
 ]
    
  

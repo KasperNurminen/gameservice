@@ -1,0 +1,12 @@
+.table-row{
+    cursor:pointer;
+}
+
+.multiselect-native-select{
+    width:600px;
+}
+    
+
+.page-header{
+    display: flex;
+}
