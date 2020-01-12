@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
-from .models import Game, Category, Payment
+from .models import Game, Category, Payment, Score
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from .forms import RegisterForm
@@ -61,3 +61,19 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
+
+
+class Profile(LoginRequiredMixin, View):
+    login_url = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        #ownedgames = Payment.objects.filter(user__pk=request.user.pk)
+        highscores = Score.objects.filter(player__pk=request.user.pk)
+        #gamesforhighscores = 
+        context = {
+            'Game': highscores,
+            'Highscore': highscores,
+            
+        }
+        return render(request, "profile.html", context=context)

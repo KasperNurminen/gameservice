@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django.conf.urls import url
-from gameservice.views import Main, GameDetail
+from gameservice.views import Main, GameDetail, Profile
 from gameservice import views
 
 urlpatterns = [
@@ -26,6 +26,7 @@ urlpatterns = [
     path('', Main.as_view(), name="main"),
     path('game/<int:id>', GameDetail.as_view(), name="game"),
     path('register/', views.register, name="register"),
+    path('profile/', Profile.as_view(), name="profile"),
 ]
    
  
