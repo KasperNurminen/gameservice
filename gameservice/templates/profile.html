@@ -5,9 +5,9 @@
 <div class="row">
     <div class="col">
     <h1> User profile </h1>
-    <p> Username: {{ request.user.name}} </p>
-    <p> First name: {{ request.user.name}} </p>
-    <p> Surname: {{ request.user.name}} </p>
+    <p> Username: {{ request.user.username}} </p>
+    <p> First name: {{ request.user.first_name}} </p>
+    <p> Surname: {{ request.user.last_name}} </p>
 
     <a href="/changepassword"> Change password </a>
 
