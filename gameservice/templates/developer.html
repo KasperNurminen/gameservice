@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+<div class="row">
+    <h1>Developer view</h1>
+     <table class="table table-striped table-hover">
+        <tr >
+            <th>Title</th>
+            <th>Price</th> 
+            <th>Categories</th>
+            <th>Sold</th>
+            <th>Actions</th>
+        </tr>
+        {% for game in results %}
+            <tr >
+            <td>{{ game.title }}</td> 
+            <td>{{ game.price }}  €</td> 
+            <td>{{game.categories.all|join:", "}}</td>
+             <td>{{ game.sold.count }} units, total {{game.sold.monetary}}  €</td> 
+            <td>
+                <a href="{% url 'developer-edit' game.pk %}"><button>Edit</button></a>
+                <a href="{% url 'developer-delete' game.pk %}"><button>Delete</button></a>
+            </td>
+            </tr>
+        {% endfor %}
+    </table>
+     <a href="{% url 'developer-create'%}"><button>Add new game</button></a>
+</div>
+
+{% endblock %}
+
+    

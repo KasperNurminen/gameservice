@@ -9,7 +9,7 @@
     <p> First name: {{ request.user.first_name}} </p>
     <p> Surname: {{ request.user.last_name}} </p>
 
-    <a href="/changepassword"> Change password </a>
+    <a href="/password_change"> Change password </a>
 
      </div>
 </div>
@@ -17,7 +17,7 @@
 
 <div class="row mt-4">
     <div class="col">
-
+        <h1> Personal highscores</h1>
         <table class="table table-striped table-hover">
             <tr >
                 <th>Game</th>
@@ -27,14 +27,17 @@
                 <td>{{ game.title }}</td> 
             {% endfor %} {% endcomment %}
             {% for score in Highscore %}
-                <td>{{ Score.game }}</td> 
-                <td>{{ Score.score }}</td> 
-
+                <tr>
+                <td>{{ score.game.title }}</td> 
+                <td>{{ score.score }}</td> 
+                </tr>
             {% endfor %}
         </table>
         
     </div>
 </div>
+
+
 
 
 {% endblock %}
