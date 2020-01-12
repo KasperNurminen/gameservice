@@ -6,11 +6,11 @@ from gameservice.models import Game, Payment, Score, Category
 class Command(BaseCommand):
     def handle(self, **options):
         # superuser
-        User.objects.create_superuser('admin', 'admin@example.com', 'admin').save()
+        User.objects.create_superuser('admin', 'admin@example.com', 'admin')
 
         # käyttäjät
-        testikayttaja = User(username="player", password="pass")
-        testidevaaja = User(username="developer", password="pass")
+        testikayttaja = User.objects.create_user('player', 'player@example.com', 'pass')
+        testidevaaja = User.objects.create_user('developer', 'developer@example.com', 'pass')
         group = Group.objects.get(name='developers')   
         testidevaaja.save()
         testidevaaja.groups.add(group)

@@ -10,9 +10,16 @@
   <body>
     <div class="page-header">
         <h1><a href="/">Game Service</a></h1>
+        {% if perms.gameservice.can_edit_games %}
+        <a href="/developer"> Developer view </a>
+        {% endif %}
+        {% if user.is_authenticated %}
         <div>
-            <p> You are logged as {{request.user.username}} </p> <a href="/logout"> Log out </a>
+            Hello, {{user.get_username}} 
+            <a href="/logout"> Log out </a>
         </div>
+        {% endif %}
+
     </div>
     <div class="content container">
             {% block content %}
