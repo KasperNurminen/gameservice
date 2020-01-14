@@ -19,6 +19,7 @@
             <td>{{game.categories.all|join:", "}}</td>
              <td>{{ game.sold.count }} units, total {{game.sold.monetary}}  €</td> 
             <td>
+                <a href="{% url 'developer-details' game.pk %}"><button>Details</button></a>
                 <a href="{% url 'developer-edit' game.pk %}"><button>Edit</button></a>
                 <a href="{% url 'developer-delete' game.pk %}"><button>Delete</button></a>
             </td>
