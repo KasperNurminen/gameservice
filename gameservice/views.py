@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 import json
 from django.urls import reverse
+from hashlib import md5
 
 
 class Main(LoginRequiredMixin, View):
@@ -108,3 +109,61 @@ class Register(View):
             login(request, user)
             return redirect('/')
         return render(request, 'register.html', {'form': form})
+
+        
+class Purchase(View):
+    
+    
+    def get(self, request, *args, **kwargs): 
+        id = self.kwargs.get('pk')
+        game = Game.objects.get(pk=id)
+        
+        pid = str(game.pk) + "pid" + str(request.user.pk)
+        sid = "4tNYjktBUw=="
+        secret = "0comjVxQGbSgpqRdiS944JCEL4QA"
+        amount = game.price
+        checksumstr =  f"pid={pid:s}&sid={sid:s}&amount={amount:.2f}&token={secret:s}"
+        checksum = md5(checksumstr.encode('utf-8')).hexdigest()
+        context = {
+            'game': game,
+            'pid' : pid,
+            'sid' : sid,
+            'checksum' : checksum,
+            'amount' : amount
+        }
+        return render(request, 'purchase.html', context=context)
+   
+class PaymentSuccess(View):
+    
+    def get(self, request, *args, **kwargs): 
+        ref= request.GET.get('ref', None)
+        pid = request.GET.get('pid', None)
+        result = request.GET.get('result', None)
+        checksum1 = request.GET.get('checksum', None)
+        secret = "0comjVxQGbSgpqRdiS944JCEL4QA"
+        checksumstr = f"pid={pid:s}&ref={ref:s}&result={result:s}&token={secret:s}"
+        checksum2 = md5(checksumstr.encode('utf-8')).hexdigest()
+        sid = "4tNYjktBUw=="
+        game = Game.objects.get(pk=pid.split('p')[0])
+        test = None
+        try: #testing if payment object already exists
+            test = Payment.objects.get(pid=pid)
+        except:
+            test = None
+
+        if checksum1 == checksum2 and result == 'success': #testing that payment was succesful
+            if test == None: #testing if payment object already exists
+                p = Payment(user=request.user, price=game.price, game= game, pid = pid, sid = sid)
+                p.save()
+            context = {
+                'game': game
+            }
+            return render(request, 'paymentSuccess.html', context=context)
+        else:
+            return redirect("payment/error/")
+
+        
+class PaymentFailed(View):
+    
+    def get(self, request, *args, **kwargs): 
+        return render(request, 'paymentFailed.html')

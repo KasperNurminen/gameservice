@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+{% block content %} <h3> Purchase Game: {{game.title}} </h3>
+
+
+
+<form action="https://tilkkutakki.cs.aalto.fi/payments/pay" method="POST">
+  <input type="hidden" name="pid" value= {{pid}} >
+  <input type="hidden" name="sid" value= {{sid}}>
+  <input type="hidden" name="amount" value={{game.price}}>
+  <input type="hidden" name="success_url" value="http://localhost:8000/paymentSuccess">
+  <input type="hidden" name="cancel_url" value="http://localhost:8000/paymentFailed">
+  <input type="hidden" name="error_url" value="http://localhost:8000/paymentFailed">
+  <input type="hidden" name="checksum"value={{checksum}}>
+  Amount to be paid: {{amount}}
+  <br>
+  <input type="submit" value="Pay">
+</form>
+
+{% endblock %}
