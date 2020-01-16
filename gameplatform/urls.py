@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from gameservice.views import Main, GameDetail, Register, Developer, DeveloperEdit, DeveloperCreate, DeveloperDelete, Profile
+from gameservice.views import Main, GameDetail, Register, Developer, DeveloperEdit, DeveloperCreate, DeveloperDelete, Profile, activate_account
+from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +30,8 @@ urlpatterns = [
     path('developer/new', DeveloperCreate.as_view(), name="developer-create"),
     path('developer/delete/<int:pk>', DeveloperDelete.as_view(), name="developer-delete"),
     path('profile/', Profile.as_view(), name="profile"),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        activate_account, name='activate'),
 ]
    
  

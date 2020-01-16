@@ -121,10 +121,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = "/"
+#custom settings
 
-LOGOUT_REDIRECT_URL = "/login"
+LOGIN_REDIRECT_URL = "/" #after login redirect
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+LOGOUT_REDIRECT_URL = "/login" #after logout redirect
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #using console for mails instead of SMTP server"
 
 

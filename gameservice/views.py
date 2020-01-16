@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View, UpdateView, CreateView, DeleteView
-from .models import Game, Category, Payment, Score
+from .models import Game, Category, Payment, Score, User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from .forms import RegisterForm
@@ -8,6 +8,13 @@ from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 import json
 from django.urls import reverse
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+from django.core.mail import EmailMessage
+from django.contrib import messages
 
 
 class Main(LoginRequiredMixin, View):
@@ -101,14 +108,24 @@ class Register(View):
     def post(self, request, *args, **kwargs):
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('/')
-      
-        return render(request, 'register.html', {'form': form})
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            email_subject = 'Activate Your Account'
+            message = render_to_string('activate_account.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(email_subject, message, to=[to_email])
+            email.send()
+            return HttpResponse('We have sent you an email, please confirm your email address to complete registration')
+            
+           
+        return render(request, 'register.html', {'form': form}) 
 
 
 class Profile(LoginRequiredMixin, View):
@@ -118,12 +135,33 @@ class Profile(LoginRequiredMixin, View):
         context = {}
         #ownedgames = Payment.objects.filter(user__pk=request.user.pk)
         
-        highscores = Payment.objects.filter(user__pk=request.user.pk) #Score.objects.filter(player__pk=request.user.pk)
-        
+        #highscores = Score.objects.filter(player__pk=request.user.pk).order_by('-game.title', 'score') #Score.objects.filter(player__pk=request.user.pk)
+        #highscores = highscores.annotate(
+        #count_id=Score.objects.Count('Game.title')
+        #)
+        #highscores = highscores.filter(count_id__gt=1)
+        #removing all but highest score per game
+        #duplicate_scores = Score.objects.filter(player__pk=request.user.pk).values('Game.title').annotate(title_count=Count('Game.title')).filter(title_count__gt=1)
+       
+
         #gamesforhighscores = 
         context = {
-            'Highscore': Score.objects.filter(player__pk=request.user.pk),
+            'Highscore': Score.objects.filter(player__pk=request.user.pk).order_by('-game.title', 'score'),
             
         }
         return render(request, "profile.html", context=context)
         
+def activate_account(request, uidb64, token):
+    try:
+        uid = force_bytes(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, user.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return redirect('/')
+        #return HttpResponse('Your account has been activate successfully')
+    else:
+        return HttpResponse('Activation link is invalid!')
