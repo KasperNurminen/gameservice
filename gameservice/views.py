@@ -132,22 +132,20 @@ class Profile(LoginRequiredMixin, View):
     login_url = '/login/'
 
     def get(self, request, *args, **kwargs):
-        context = {}
-        #ownedgames = Payment.objects.filter(user__pk=request.user.pk)
-        
-        #highscores = Score.objects.filter(player__pk=request.user.pk).order_by('-game.title', 'score') #Score.objects.filter(player__pk=request.user.pk)
-        #highscores = highscores.annotate(
-        #count_id=Score.objects.Count('Game.title')
-        #)
-        #highscores = highscores.filter(count_id__gt=1)
-        #removing all but highest score per game
-        #duplicate_scores = Score.objects.filter(player__pk=request.user.pk).values('Game.title').annotate(title_count=Count('Game.title')).filter(title_count__gt=1)
-       
+        allscores = Score.objects.filter(player__pk=request.user.pk).order_by('-game__title', '-score') #sort to title and score
+        gametitles = []
+        for x in allscores: #all game titles in a list
+            gametitles2.append(x.game.title)
 
-        #gamesforhighscores = 
-        context = {
-            'Highscore': Score.objects.filter(player__pk=request.user.pk).order_by('-game.title', 'score'),
+        gametitles = list(dict.fromkeys(gametitles2)) #remove duplicates
+        finallist = []
+        for title in gametitles: #take only one score per title
+            finallist.append(allscores.filter(game__title=title)[0])
             
+        print (finallist)
+        context = {
+            'Highscore': finallist 
+                     
         }
         return render(request, "profile.html", context=context)
         
