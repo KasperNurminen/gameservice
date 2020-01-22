@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block content %} 
+
+<h3> Payment Successful! {{game.title}} </h3>
+
+<a href="{% url 'game' game.pk %}"><button>Play the new game!</button></a> 
+
+<a href="{% url 'main' %}"><button>Go to home page</button></a> 
+
+
+
+{% endblock %}
