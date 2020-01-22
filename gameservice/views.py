@@ -9,6 +9,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 import json
 from django.urls import reverse
 from hashlib import md5
+from datetime import datetime
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 class Main(LoginRequiredMixin, View):
@@ -87,8 +89,15 @@ class DeveloperDelete(PermissionRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse('developer')
 
-class GameDetail(LoginRequiredMixin, View):
+class GameDetail(UserPassesTestMixin, View):
     login_url = '/login/'
+    
+    def test_func(self):
+        id = self.request.path.replace("/game/", "")
+        
+        return Payment.objects.filter(user__pk = self.request.user.pk, game__pk = id).first() or False
+
+    
     def get(self, request, id, *args, **kwargs):
         game = Game.objects.get(pk=id)
         context = {'game': game}
@@ -114,13 +123,18 @@ class Register(View):
 class Purchase(View):
     
     
+    
     def get(self, request, *args, **kwargs): 
+        #secret should not be in version control, separate file to indicate that
+        with open("gameservice/secret.txt", 'r') as f:
+            secret = f.read()
+        
         id = self.kwargs.get('pk')
         game = Game.objects.get(pk=id)
         
-        pid = str(game.pk) + "pid" + str(request.user.pk)
+        pid = str(game.pk) + "pid" + str(request.user.pk) + "time" + str(datetime.timestamp(datetime.now()))
+        print(pid)
         sid = "4tNYjktBUw=="
-        secret = "0comjVxQGbSgpqRdiS944JCEL4QA"
         amount = game.price
         checksumstr =  f"pid={pid:s}&sid={sid:s}&amount={amount:.2f}&token={secret:s}"
         checksum = md5(checksumstr.encode('utf-8')).hexdigest()
@@ -132,15 +146,19 @@ class Purchase(View):
             'amount' : amount
         }
         return render(request, 'purchase.html', context=context)
-   
-class PaymentSuccess(View):
-    
+
+
+
+class PaymentSuccess(View): 
     def get(self, request, *args, **kwargs): 
-        ref= request.GET.get('ref', None)
-        pid = request.GET.get('pid', None)
-        result = request.GET.get('result', None)
-        checksum1 = request.GET.get('checksum', None)
-        secret = "0comjVxQGbSgpqRdiS944JCEL4QA"
+        #secret should not be in version control, separate file to indicate that
+        with open("gameservice/secret.txt", 'r') as f:
+            secret = f.read()
+        
+        ref= request.GET.get('ref')
+        pid = request.GET.get('pid')
+        result = request.GET.get('result')
+        checksum1 = request.GET.get('checksum')
         checksumstr = f"pid={pid:s}&ref={ref:s}&result={result:s}&token={secret:s}"
         checksum2 = md5(checksumstr.encode('utf-8')).hexdigest()
         sid = "4tNYjktBUw=="
@@ -152,7 +170,7 @@ class PaymentSuccess(View):
             test = None
 
         if checksum1 == checksum2 and result == 'success': #testing that payment was succesful
-            if test == None: #testing if payment object already exists
+            if not test: #testing if payment object already exists
                 p = Payment(user=request.user, price=game.price, game= game, pid = pid, sid = sid)
                 p.save()
             context = {

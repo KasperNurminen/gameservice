@@ -62,7 +62,6 @@
                     Already owned
                     {% else %}
                      <a href="{% url 'purchaseconfirmation' game.pk %}"><button>Purchase</button></a>
-                    {% comment %} <button onclick="purchaseTitle(event, {{game.pk}})">Purchase</td> {% endcomment %}
                     {% endif %}
                     </tr>
                 {% endfor %}
