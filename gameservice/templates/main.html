@@ -61,7 +61,7 @@
                     {% if game.owned %}
                     Already owned
                     {% else %}
-                    <button onclick="purchaseTitle(event, {{game.pk}})">Purchase</td>
+                     <a href="{% url 'purchaseconfirmation' game.pk %}"><button>Purchase</button></a>
                     {% endif %}
                     </tr>
                 {% endfor %}
@@ -83,8 +83,8 @@
         }).multiselect('select', values);
     });    
     var purchaseTitle = function (event, pk) {
-        alert("Should purchase game with id " + pk)
-        event.stopPropagation()
+        location.replace("/purchase/" + pk)
+        
     }
     
 </script>

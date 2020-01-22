@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from gameservice.views import Main, GameDetail, Register, Developer, DeveloperEdit, DeveloperCreate, DeveloperDelete
+from gameservice.views import Main, GameDetail, Register, Developer, DeveloperEdit, DeveloperCreate, DeveloperDelete, Purchase, PaymentSuccess, PaymentFailed
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +28,9 @@ urlpatterns = [
     path('developer/', Developer.as_view(), name='developer'),
     path('developer/new', DeveloperCreate.as_view(), name="developer-create"),
     path('developer/delete/<int:pk>', DeveloperDelete.as_view(), name="developer-delete"),
+    path('purchase/<int:pk>', Purchase.as_view(), name="purchaseconfirmation"),
+    path('paymentSuccess', PaymentSuccess.as_view(), name="paymentSuccess"),
+    path('paymentFailed', PaymentFailed.as_view(), name="paymentFailed")
 ]
    
  
