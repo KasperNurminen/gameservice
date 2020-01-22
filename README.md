@@ -80,34 +80,33 @@ We use https://tilkkutakki.cs.aalto.fi/payments/ as a payment processor. Sid and
 
 ### Initial view proposal
 
-* Login  (Atte, done by 9.1.2020)
+* Login  (Atte, DONE)
     *  login
     *  register (as player)
 
-* "Main view" (Kasper, done by 9.1.2020)
+* "Main view" (Kasper, DONE)
     * search and purchase games
     * filter to show only purchased
     * text search and category filtering
 
-* Game view (Sanni, done by 9.1.2020)
+* Game view (Sanni,IN PROGRESS)
     * playing each game
     * saving and loading data
     * high scores
 
-* Developer inventory 
+* Developer inventory DONE
     * list of developer's games, sales information and edit and remove buttons
-    * Django admin
   
-* Add/edit game
+* Add/edit game DONE Atte
     * possibility to modify name, price, url
     * Django admin
 	
-* Profile
+* Profile 
     * name
     * high scores for all games
-    * payment history
+    * payment history IN PROGRESS Sanni
 
-* Payment Processing
+* Payment Processing DONE
 
 ### Next steps
 - Integrate developers to django admin Kasper
@@ -115,7 +114,11 @@ We use https://tilkkutakki.cs.aalto.fi/payments/ as a payment processor. Sid and
 - Integrate payment processing Atte/Sanni
 - Implement user profile - Atte
 - Add secondary table "owned games" - Kasper
-- Fix UI (later)
+- Fix UI / Mobile Friendly Sanni
+- Heroku Together
+- Code Quality Kasper
+- API Kasper
+
 
 ### Project management
 
