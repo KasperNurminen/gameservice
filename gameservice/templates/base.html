@@ -19,6 +19,11 @@
             <a href="/logout"> Log out </a>
         </div>
         {% endif %}
+        {% if user.is_authenticated %}
+        <div>
+            <a href="/profile"> Personal highscores and profile</a>
+        </div>
+        {% endif %}
 
     </div>
     <div class="content container">

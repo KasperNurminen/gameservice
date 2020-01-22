@@ -122,7 +122,8 @@ class Register(View):
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(email_subject, message, to=[to_email])
             email.send()
-            return HttpResponse('We have sent you an email, please confirm your email address to complete registration')
+            #return HttpResponse('We have sent you an email, please confirm your email address to complete registration')
+            return redirect('/emailconfirmation') 
             
            
         return render(request, 'register.html', {'form': form}) 
@@ -135,9 +136,9 @@ class Profile(LoginRequiredMixin, View):
         allscores = Score.objects.filter(player__pk=request.user.pk).order_by('-game__title', '-score') #sort to title and score
         gametitles = []
         for x in allscores: #all game titles in a list
-            gametitles2.append(x.game.title)
+            gametitles.append(x.game.title)
 
-        gametitles = list(dict.fromkeys(gametitles2)) #remove duplicates
+        gametitles = list(dict.fromkeys(gametitles)) #remove duplicates
         finallist = []
         for title in gametitles: #take only one score per title
             finallist.append(allscores.filter(game__title=title)[0])
@@ -163,3 +164,9 @@ def activate_account(request, uidb64, token):
         #return HttpResponse('Your account has been activate successfully')
     else:
         return HttpResponse('Activation link is invalid!')
+
+
+class emailConfirmation(View):
+  
+    def get(self, request, *args, **kwargs):
+        return render(request, "emailconfirmation.html")
