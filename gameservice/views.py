@@ -65,6 +65,17 @@ class DeveloperEdit(PermissionRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('developer')
 
+class DeveloperDetails(PermissionRequiredMixin, View):
+    permission_required = 'gameservice.can_edit_games'
+    def get(self, request, pk, *args, **kwargs):
+        game = Game.objects.get(pk=pk)
+        payments = Payment.objects.filter(game__pk=pk) 
+        total = {"count": len(payments), "monetary": sum([p.price for p in payments])}
+        context = {'purchases': payments,
+                   'game': game,
+                   'total': total}
+        return render(request, "developer-details.html", context=context)
+
 class DeveloperCreate(PermissionRequiredMixin, CreateView):
     permission_required = 'gameservice.can_edit_games'
 
