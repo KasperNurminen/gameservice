@@ -1,5 +1,6 @@
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 import six
+from hashlib import md5
 
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
     def _make_hash(self, user, timestamp):
@@ -9,3 +10,6 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
         )
         
 account_activation_token = AccountActivationTokenGenerator()
+
+
+
