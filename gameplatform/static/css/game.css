@@ -1,0 +1,22 @@
+.gameTitle {
+    padding: 30px;
+    letter-spacing: 2;
+    font-weight: 400;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-column-gap: 50px;
+    margin-top: 8px;
+}
+
+.scoreText {
+    font-weight: 400;
+    padding: 6px;
+}
+
+.backgroundGame {
+    background-color: azure;
+    height: 50vh;
+}
