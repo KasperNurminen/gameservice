@@ -109,15 +109,15 @@ We use https://tilkkutakki.cs.aalto.fi/payments/ as a payment processor. Sid and
 * Payment Processing DONE
 
 ### Next steps
-- Integrate developers to django admin Kasper
+- Integrate developers  Kasper DONE
 - Finalize game view - Sanni
-- Integrate payment processing Atte/Sanni
-- Implement user profile - Atte
-- Add secondary table "owned games" - Kasper
-- Fix UI / Mobile Friendly Sanni
+- Integrate payment processing Atte/Sanni DONE
+- Implement user profile - Atte DONE
+- Add secondary table "owned games" - Kasper DONE
+- Fix UI / Mobile Friendly Sanni 
 - Heroku Together
 - Code Quality Kasper
-- API Kasper
+- API Kasper DONE
 
 
 ### Project management
