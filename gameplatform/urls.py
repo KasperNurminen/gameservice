@@ -31,7 +31,7 @@ urlpatterns = [
     path('developer/<int:pk>', DeveloperDetails.as_view(),
          name="developer-details"),
     path('developer/new', DeveloperCreate.as_view(), name="developer-create"),
-    path('developer/delete/<int:pk>',
+    path('developer/<int:pk>/delete',
          DeveloperDelete.as_view(), name="developer-delete"),
     path('purchase/<int:pk>', Purchase.as_view(), name="purchaseconfirmation"),
     path('paymentSuccess', PaymentSuccess.as_view(), name="paymentSuccess"),
