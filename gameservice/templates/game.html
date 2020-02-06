@@ -3,23 +3,21 @@
 {% load static %}
 {% block content %}
 {% csrf_token %}
-<div class="backgroundGame">
-    <div class="row">
-        <div class="col">
-            <h1 class="gameTitle">{{game.title}}</h1>
-            <iframe src={{game.url}} id="iframe" name="iframe"></iframe>
-        </div>
-        <div class="col">
-            <h3 class="gameTitle">High scores:</h3>
-            <table id="scores" name="scores[]">
-                {% for score in scores %}
-                <tr>
-                    <th class="scoreText">{{score.player}}: </th>
-                    <th class="scoreText">{{score.score}}</th>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
+<div class="row">
+    <div class="col">
+        <h1 class="gameTitle">{{game.title}}</h1>
+        <iframe src={{game.url}} id="iframe" name="iframe"></iframe>
+    </div>
+    <div class="col">
+        <h3 class="gameTitle">High scores:</h3>
+        <table id="scores" name="scores[]">
+            {% for score in scores %}
+            <tr>
+                <th class="scoreText">{{score.player}}: </th>
+                <th class="scoreText">{{score.score}}</th>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 </div>
 <script>

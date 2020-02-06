@@ -5,13 +5,14 @@
 .multiselect-native-select{
     width:600px;
 }
-    
 
 .page-header{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    padding: 0 24px;
     align-items: center;
-    background-color: #d2e7ef;
+    background-color: #ecf1f3;
+    color: black
 }
 
 .search-options{
@@ -24,4 +25,117 @@
 .search-options form{
     margin-left: 2rem;
     margin-bottom: 0;
+}
+
+body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #172930;
+    overflow: hidden;
+}
+
+.container {
+    width: 100%;
+    height: calc(100% - 56px);
+    margin: 0;
+    padding: 0;
+}
+
+.background {
+    background-color: #ecf1f3;
+    height: calc(40% - 56px);
+    position: absolute;
+    width: 100vw;
+    margin: 0; 
+    z-index: -1;
+}
+
+.content {
+    height: 100%;
+    width: 100vw;
+    margin: 0; 
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-start;
+}
+
+.contentBlock {
+    background-color: rgb(255, 255, 255);
+    padding: 6px;
+    min-height: 40vh;
+    margin-top: 2%;
+    border-radius: 2%;
+    max-width: 48vw;
+
+}
+
+.row {
+    padding: 18px;
+    padding-bottom: 0px;
+}
+
+.title { 
+    padding: 12px 0px;
+    letter-spacing: 2;
+    font-weight: 400;
+}
+
+a {
+    color: rgb(36, 122, 219);
+    text-decoration: none;
+}
+
+a:hover {
+    color: rgb(35, 80, 206);
+    text-decoration: none;
+}
+
+.search {
+    font-size: 32px;
+    padding-top: 20px;
+    letter-spacing: 1;
+}
+
+/* Search */
+.searchGrid { 
+    display: grid;
+    grid-template-columns: auto;
+}
+
+.searchForm {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    margin-left: 0px;
+}
+
+#search { 
+    border-radius: 2px;
+    border: 1px solid grey;
+    padding: 4px 12px;
+    margin: 2px;
+}
+
+#search:focus {
+    border: 1px solid #555;
+}
+
+#categories {
+    padding: 4px 8px;
+    border: 1px solid grey;
+    overflow: hidden;
+    margin: 2px;
+}
+
+button {
+    background-color: rgb(36, 122, 219);
+    border: none;
+    color: white;
+    padding: 4px 40px 6px 40px;
+    text-align: center;
+    margin: 2px;
+}
+
+button:hover {
+    background-color: rgb(35, 80, 206);  
 }
