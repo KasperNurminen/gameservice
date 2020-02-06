@@ -9,31 +9,4 @@
 
 .page-header{
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background-color: #d2e7ef;
-}
-
-.search-options{
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    width: 100%;
-}
-
-.search-options form{
-    margin-left: 2rem;
-    margin-bottom: 0;
-}
-
-.container {
-    background-color: #ecf1f3;
-    margin: 0;
-    width: 100%;
-
-}
-
-.content {
-    width: 100%;
-    margin: 0;
 }

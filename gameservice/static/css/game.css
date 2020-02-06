@@ -1,5 +1,5 @@
 .gameTitle {
-    padding: 0 20px;
+    padding: 30px;
     letter-spacing: 2;
     font-weight: 400;
 }
@@ -14,4 +14,9 @@
 .scoreText {
     font-weight: 400;
     padding: 6px;
+}
+
+.backgroundGame {
+    background-color: azure;
+    height: 50vh;
 }
