@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View, UpdateView, CreateView, DeleteView
-from .models import Game, Category, Payment, Score, User
+from .models import Game, Category, Payment, Score, User, SaveData
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from .forms import RegisterForm, isDevForm
-from django.http import HttpResponse
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 import json
 from django.urls import reverse
 from django.contrib.sites.shortcuts import get_current_site
@@ -19,6 +19,9 @@ from hashlib import md5
 from datetime import datetime
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
+from django.core import serializers
+from django.db import transaction
 
 
 class Main(LoginRequiredMixin, View):
@@ -127,8 +130,48 @@ class GameDetail(UserPassesTestMixin, View):
 
     def get(self, request, id, *args, **kwargs):
         game = Game.objects.get(pk=id)
-        context = {'game': game}
+        scores = Score.objects.filter(game=game)[0:10]
+        context = {'game': game,
+                   'scores': scores, }
         return render(request, "game.html", context=context)
+
+
+class ScoreView(View):
+    def post(self, request, id, *args, **kwargs):
+        game = Game.objects.get(pk=id)
+        score = request.POST.get('score', False)
+        player = request.POST.get('player', False)
+        prevScores = Score.objects.filter(player=player, game=game)
+
+        if score and (len(prevScores) == 0 or int(score) > prevScores[0].score):
+            # pelaajalla voi olla vain yksi highscore per peli
+            with transaction.atomic():  # varmistetaan ettei kaikki scoret häviä
+                prevScores.all().delete()
+                newScore = Score(player=User.objects.get(pk=player), score=score,
+                                 game=Game.objects.get(pk=id))
+                newScore.save()
+            # palauta JSONResponse jossa kaikki uudet scoret
+            scores = Score.objects.filter(game=Game.objects.get(pk=id))[0:10]
+            data = json.dumps(
+                [{"player": score.player.username, "score": score.score} for score in scores])
+            return HttpResponse(data, content_type="application/json")
+        return HttpResponse(status=400)
+
+
+class SaveDataView(View):
+    def post(self, request, id, *args, **kwargs):
+        player = request.POST.get('player', False)
+        state = request.POST.get('gameState', False)
+        newSave = SaveData(player=User.objects.get(pk=player),
+                           data=state, game=Game.objects.get(pk=id))
+        newSave.save()
+        return HttpResponse(status=201)
+
+    def get(self, request, id, *args, **kwargs):
+        game = Game.objects.get(pk=id)
+        pk = request.GET['player']
+        gameState = SaveData.objects.filter(player__pk=pk, game=game).last()
+        return JsonResponse({"data": gameState.data})
 
 
 class Register(View):
@@ -222,7 +265,6 @@ class Purchase(View):
 
         pid = str(game.pk) + "pid" + str(request.user.pk) + \
             "time" + str(datetime.timestamp(datetime.now()))
-        print(pid)
         sid = "4tNYjktBUw=="
         amount = game.price
         checksumstr = f"pid={pid:s}&sid={sid:s}&amount={amount:.2f}&token={secret:s}"

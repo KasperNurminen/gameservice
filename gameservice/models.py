@@ -39,6 +39,9 @@ class Score(models.Model):
         on_delete=models.CASCADE
     )
 
+    class Meta:
+        ordering = ["-score"]
+
 
 class SaveData(models.Model):
     player = models.ForeignKey(

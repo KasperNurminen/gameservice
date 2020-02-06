@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Game, Category
+from .models import Game, Category, Score
 
 
 class GameAdmin(admin.ModelAdmin):
@@ -11,5 +11,10 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name",)
 
 
+class ScoreAdmin(admin.ModelAdmin):
+    list_display = ("player", "score", "game")
+
+
 admin.site.register(Game, GameAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Score, ScoreAdmin)
