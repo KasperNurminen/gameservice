@@ -39,7 +39,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gameservice',
+    'api',
+    'rest_framework',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -121,12 +133,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-#custom settings
+# custom settings
 
-LOGIN_REDIRECT_URL = "/" #after login redirect
+LOGIN_REDIRECT_URL = "/"  # after login redirect
 
-LOGOUT_REDIRECT_URL = "/login" #after logout redirect
+LOGOUT_REDIRECT_URL = "/login"  # after logout redirect
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #using console for mails instead of SMTP server"
+# using console for mails instead of SMTP server"
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-
+LOGOUT_REDIRECT_URL = "/login"
