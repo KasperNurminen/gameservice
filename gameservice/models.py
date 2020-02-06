@@ -10,7 +10,7 @@ class Game(models.Model):
         on_delete=models.CASCADE
     )
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    url = models.URLField(max_length=200)
+    url = models.CharField(max_length=200)
     categories = models.ManyToManyField(
         'Category')
 
