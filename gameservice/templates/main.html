@@ -84,13 +84,12 @@
     </div>
 
 </span>
-<script type="text/javascript" src="{% static 'js/bootstrap-multiselect.js' %}"></script>
-<link rel="stylesheet" href="{% static 'css/bootstrap-multiselect.css' %}" type="text/css" />
+<script type="text/javascript" src="{% static 'js/lib/bootstrap-multiselect.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/lib/bootstrap-multiselect.css' %}" type="text/css" />
 <script src="{% static 'js/main.js' %}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        var values = {{ selected_categories| safe
-    }}
+        var values = {{ selected_categories|safe }}
         $('#categories').multiselect({
             nonSelectedText: 'Filter by category',
             buttonWidth: "200px",
