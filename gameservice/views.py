@@ -1,3 +1,5 @@
+
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.shortcuts import render, redirect
 from django.views.generic import View, UpdateView, CreateView, DeleteView
 from .models import Game, Category, Payment, Score, User, SaveData
@@ -22,6 +24,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.db import transaction
+from django.utils.decorators import method_decorator
 
 
 class Main(LoginRequiredMixin, View):
@@ -136,6 +139,7 @@ class GameDetail(UserPassesTestMixin, View):
         id = self.request.path.replace("/game/", "")
         return Payment.objects.filter(user__pk=self.request.user.pk, game__pk=id).first() or False
 
+    @method_decorator(xframe_options_exempt)
     def get(self, request, id, *args, **kwargs):
         game = Game.objects.get(pk=id)
         scores = Score.objects.filter(game=game)[0:10]
