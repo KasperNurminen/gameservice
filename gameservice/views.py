@@ -1,27 +1,20 @@
+from django.db import transaction
+from hashlib import md5
+from datetime import datetime
+from django.core import serializers
+from django.contrib.auth.models import User
+from .models import Game, Category, Payment, Score, SaveData
+from django.http import HttpResponse, JsonResponse
+from django.urls import reverse
+import json
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import View, UpdateView, CreateView, DeleteView
 from .models import Game, Category, Payment, Score, User, SaveData
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from .forms import RegisterForm, isDevForm
-from django.http import HttpResponse, JsonResponse
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
-import json
-from django.urls import reverse
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template.loader import render_to_string
-from .tokens import account_activation_token
-from django.core.mail import EmailMessage
-from django.contrib import messages
-from hashlib import md5
-from datetime import datetime
-from django.contrib.auth.mixins import UserPassesTestMixin
-from django.contrib.auth.models import Group
-from django.contrib.auth.models import User
-from django.core import serializers
-from django.db import transaction
 
 
 class Main(LoginRequiredMixin, View):
@@ -69,8 +62,11 @@ class Developer(PermissionRequiredMixin, View):
         return render(request, "developer.html", context=context)
 
 
-class DeveloperEdit(PermissionRequiredMixin, UpdateView):
-    permission_required = 'gameservice.can_edit_games'
+class DeveloperEdit(UserPassesTestMixin, UpdateView):
+    def test_func(self):
+        id = self.request.path.replace("/developer/", "").replace("/edit", "")
+
+        return Game.objects.filter(pk=id, developer__pk=self.request.user.pk).first() or False
 
     model = Game
     fields = ['title', 'url', 'price', 'categories']
@@ -80,8 +76,11 @@ class DeveloperEdit(PermissionRequiredMixin, UpdateView):
         return reverse('developer')
 
 
-class DeveloperDetails(PermissionRequiredMixin, View):
-    permission_required = 'gameservice.can_edit_games'
+class DeveloperDetails(UserPassesTestMixin, View):
+    def test_func(self):
+        id = self.request.path.replace("/developer/", "")
+
+        return Game.objects.filter(pk=id, developer__pk=self.request.user.pk).first() or False
 
     def get(self, request, pk, *args, **kwargs):
         game = Game.objects.get(pk=pk)
@@ -109,8 +108,11 @@ class DeveloperCreate(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class DeveloperDelete(PermissionRequiredMixin, DeleteView):
-    permission_required = 'gameservice.can_edit_games'
+class DeveloperDelete(UserPassesTestMixin, DeleteView):
+    def test_func(self):
+        id = self.request.path.replace(
+            "/developer/", "").replace("/delete", "")
+        return Game.objects.filter(pk=id, developer__pk=self.request.user.pk).first() or False
 
     model = Game
     fields = ['title', 'url', 'price', 'categories']
@@ -125,7 +127,6 @@ class GameDetail(UserPassesTestMixin, View):
 
     def test_func(self):
         id = self.request.path.replace("/game/", "")
-
         return Payment.objects.filter(user__pk=self.request.user.pk, game__pk=id).first() or False
 
     def get(self, request, id, *args, **kwargs):

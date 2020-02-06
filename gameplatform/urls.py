@@ -32,7 +32,7 @@ urlpatterns = [
     path('developer/<int:pk>', DeveloperDetails.as_view(),
          name="developer-details"),
     path('developer/new', DeveloperCreate.as_view(), name="developer-create"),
-    path('developer/delete/<int:pk>',
+    path('developer/<int:pk>/delete',
          DeveloperDelete.as_view(), name="developer-delete"),
     path('profile/', Profile.as_view(), name="profile"),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
