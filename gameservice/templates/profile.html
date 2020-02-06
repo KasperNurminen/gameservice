@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+<div class="row">
+    <div class="col">
+    <h1> User profile </h1>
+    <p> Username: {{ request.user.username}} </p>
+    <p> First name: {{ request.user.first_name}} </p>
+    <p> Surname: {{ request.user.last_name}} </p>
+
+    <a href="/password_change"> Change password </a>
+
+     </div>
+</div>
+
+
+<div class="row mt-4">
+    <div class="col">
+        <h1> Personal highscores</h1>
+        <table class="table table-striped table-hover">
+            <tr >
+                <th>Game</th>
+                <th>Highscore</th> 
+            </tr>
+            {% comment %} {% for game in Game %}   
+                <td>{{ game.title }}</td> 
+            {% endfor %} {% endcomment %}
+            {% for score in Highscore %}
+                <tr>
+                <td>{{ score.game.title }}</td> 
+                <td>{{ score.score }}</td> 
+                </tr>
+            {% endfor %}
+        </table>
+        
+    </div>
+</div>
+
+
+
+
+{% endblock %}

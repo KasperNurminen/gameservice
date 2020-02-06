@@ -18,7 +18,7 @@
                 <td>{{ game.game.developer }}</td>
                 <td>{{game.game.categories.all|join:", "}}</td>
                 <td>
-                    <a href="{% url 'game' game.pk %}"><button>Play</button></a>
+                    <a href="{% url 'game' game.game.pk %}"><button>Play</button></a>
                 </td>
             </tr>
             {% endfor %}
