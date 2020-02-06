@@ -1,19 +1,27 @@
-from django.db import transaction
-from hashlib import md5
-from datetime import datetime
-from django.core import serializers
-from django.contrib.auth.models import User
-from .models import Game, Category, Payment, Score, SaveData
-from django.http import HttpResponse, JsonResponse
-from django.urls import reverse
-import json
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import View, UpdateView, CreateView, DeleteView
+from .models import Game, Category, Payment, Score, User, SaveData
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
-from .forms import RegisterForm
+from .forms import RegisterForm, isDevForm
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+import json
+from django.urls import reverse
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+from django.core.mail import EmailMessage
+from django.contrib import messages
+from hashlib import md5
+from datetime import datetime
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
+from django.core import serializers
+from django.db import transaction
 
 
 class Main(LoginRequiredMixin, View):
@@ -177,18 +185,80 @@ class SaveDataView(View):
 class Register(View):
     def get(self, request, *args, **kwargs):
         form = RegisterForm()
-        return render(request, 'register.html', {'form': form})
+        form2 = isDevForm()
+        return render(request, 'register.html', {'form': form, 'form2': form2})
 
     def post(self, request, *args, **kwargs):
         form = RegisterForm(request.POST)
+        form2 = isDevForm()
+
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('/')
-        return render(request, 'register.html', {'form': form})
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            # add user to developer group, if checkbox is selected
+            if (request.POST.get('isDeveloper') == 'on'):
+                group = Group.objects.get(name='developers')
+                user.groups.add(group)
+            email_subject = 'Activate Your Account'
+            message = render_to_string('activate_account.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(email_subject, message, to=[to_email])
+            email.send()
+            return redirect('/emailconfirmation')
+
+        return render(request, 'register.html', {'form': form, 'form2': form2})
+
+
+class Profile(LoginRequiredMixin, View):
+    login_url = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        allscores = Score.objects.filter(player__pk=request.user.pk).order_by(
+            '-game__title', '-score')  # sort to title and score
+        gametitles = []
+        for x in allscores:  # all game titles in a list
+            gametitles.append(x.game.title)
+
+        gametitles = list(dict.fromkeys(gametitles))  # remove duplicates
+        finallist = []
+        for title in gametitles:  # take only one score per title
+            finallist.append(allscores.filter(game__title=title)[0])
+
+        print(finallist)
+        context = {
+            'Highscore': finallist
+
+        }
+        return render(request, "profile.html", context=context)
+
+
+def activate_account(request, uidb64, token):
+    try:
+        uid = force_bytes(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, user.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return redirect('/')
+        # return HttpResponse('Your account has been activate successfully')
+    else:
+        return HttpResponse('Activation link is invalid!')
+
+
+class emailConfirmation(View):
+
+    def get(self, request, *args, **kwargs):
+        return render(request, "emailconfirmation.html")
 
 
 class Purchase(View):

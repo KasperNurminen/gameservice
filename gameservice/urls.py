@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from gameservice.views import Main, GameDetail, Register, Developer, DeveloperEdit, DeveloperCreate, DeveloperDelete, DeveloperDetails, Purchase, PaymentSuccess, PaymentFailed
+from gameservice.views import Main, GameDetail, Register, Developer, DeveloperEdit, DeveloperCreate, DeveloperDelete, DeveloperDetails, Purchase, PaymentSuccess, PaymentFailed, emailConfirmation, Profile, activate_account
+from django.conf.urls import url
 
 urlpatterns = [
     path('', Main.as_view(), name="main"),
@@ -16,5 +17,10 @@ urlpatterns = [
          DeveloperDelete.as_view(), name="developer-delete"),
     path('purchase/<int:pk>', Purchase.as_view(), name="purchaseconfirmation"),
     path('paymentSuccess', PaymentSuccess.as_view(), name="paymentSuccess"),
-    path('paymentFailed', PaymentFailed.as_view(), name="paymentFailed")
+    path('paymentFailed', PaymentFailed.as_view(), name="paymentFailed"),
+    path('profile/', Profile.as_view(), name="profile"),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        activate_account, name='activate'),
+    path('emailconfirmation/', emailConfirmation.as_view(),
+         name="emailconfirmation"),
 ]
