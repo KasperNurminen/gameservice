@@ -12,7 +12,8 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2', )
+        fields = ('username', 'email', 'first_name',
+                  'last_name', 'password1', 'password2')
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -20,3 +21,11 @@ class RegisterForm(UserCreationForm):
             raise forms.ValidationError(
                 'Please use another Email, that is already taken')
         return email
+
+
+class isDevForm(forms.Form):
+    isDeveloper = forms.BooleanField(
+        label='Register as game developer', required=False)
+
+    class Meta:
+        fields = ('isDeveloper')
