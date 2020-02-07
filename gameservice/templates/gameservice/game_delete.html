@@ -2,10 +2,11 @@
 
 
 {% block content %}
-  <h2>Delete game</h2>
-<form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete "{{ object }}"?</p>
-    <input type="submit" value="Confirm">
-</form>
+<div class="gameBlock">
+  <h2 class="title">Delete game</h2>
+  <form method="post">{% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}"?</p><br>
+    <input class="submit" type="submit" value="Confirm">
+  </form>
+</div>
 {% endblock %}
-

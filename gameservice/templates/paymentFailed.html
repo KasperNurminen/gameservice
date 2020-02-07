@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
 
-{% block content %} 
+{% block content %}
+<div class="gameBlock">
+    <h3 class="title" style="letter-spacing: 0; margin-bottom: 30px;"> Payment cancelled or failed! </h3>
 
-<h3> Payment Cancelled or failed! </h3>
+    <p style="margin-bottom: 40px;"> If this problem occurs again and was not intented, contact customer service. </p>
 
-<p> If this problem occurs again and was not intented, contact customer service </p>
-
-<a href="{% url 'main' %}"><button>Go to home page</button></a>
+    <a href="{% url 'main' %}"><button>Go to home page</button></a>
+</div>
 
 
 {% endblock %}

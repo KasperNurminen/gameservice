@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 
 
-{% block content %} 
+{% block content %}
+<div class="gameBlock">
+    <h3 class="title" style="letter-spacing: 0; text-align: center;"> Payment Successful! </h3>
+    <h2 class="title" style="margin-bottom: 30px; text-align: center;"> {{game.title}} </h2>
 
-<h3> Payment Successful! {{game.title}} </h3>
+    <a href="{% url 'game' game.pk %}"><button>Play the new game!</button></a>
 
-<a href="{% url 'game' game.pk %}"><button>Play the new game!</button></a> 
-
-<a href="{% url 'main' %}"><button>Go to home page</button></a> 
-
+    <a href="{% url 'main' %}"><button>Go to home page</button></a>
+</div>
 
 
 {% endblock %}

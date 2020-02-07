@@ -1,21 +1,23 @@
 {% extends 'base.html' %}
 
 
-{% block content %} <h3> Purchase Game: {{game.title}} </h3>
+{% block content %}
+<div class="gameBlock" style="margin-bottom: 30px;">
+  <h3 class="title" style="letter-spacing: 0;"> Purchase Game: {{game.title}} </h3>
 
-
-
-<form action="https://tilkkutakki.cs.aalto.fi/payments/pay" method="POST">
-  <input type="hidden" name="pid" value= {{pid}} >
-  <input type="hidden" name="sid" value= {{sid}}>
-  <input type="hidden" name="amount" value={{game.price}}>
-  <input type="hidden" name="success_url" value="http://{{request.get_host}}/paymentSuccess">
-  <input type="hidden" name="cancel_url" value="http://{{request.get_host}}/paymentFailed">
-  <input type="hidden" name="error_url" value="http://{{request.get_host}}/paymentFailed">
-  <input type="hidden" name="checksum"value={{checksum}}>
-  Amount to be paid: {{amount}} €
-  <br>
-  <input type="submit" value="Pay">
-</form>
+  <form action="https://tilkkutakki.cs.aalto.fi/payments/pay" method="POST">
+    <input type="hidden" name="pid" value={{pid}}>
+    <input type="hidden" name="sid" value={{sid}}>
+    <input type="hidden" name="amount" value={{game.price}}>
+    <input type="hidden" name="success_url" value="http://{{request.get_host}}/paymentSuccess">
+    <input type="hidden" name="cancel_url" value="http://{{request.get_host}}/paymentFailed">
+    <input type="hidden" name="error_url" value="http://{{request.get_host}}/paymentFailed">
+    <input type="hidden" name="checksum" value={{checksum}}>
+    Amount to be paid: {{amount}} €
+    <br>
+    <br>
+    <input class="submit" type="submit" value="Pay">
+  </form>
+</div>
 
 {% endblock %}
