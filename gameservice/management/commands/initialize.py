@@ -48,8 +48,7 @@ class Command(BaseCommand):
         testipeli2.save()
 
         # score
-        score1 = Score(player=testikayttaja, score=100, game=testipeli)
-        score2 = Score(player=testikayttaja, score=200, game=testipeli)
+        score1 = Score(player=testikayttaja, score=10, game=testipeli)
         score1.save()
         score2.save()
 
