@@ -224,6 +224,7 @@ class Profile(LoginRequiredMixin, View):
     login_url = '/login/'
 
     def get(self, request, *args, **kwargs):
+        # For highscores
         allscores = Score.objects.filter(player__pk=request.user.pk).order_by(
             '-game__title', '-score')  # sort to title and score
         gametitles = []
@@ -235,10 +236,22 @@ class Profile(LoginRequiredMixin, View):
         for title in gametitles:  # take only one score per title
             finallist.append(allscores.filter(game__title=title)[0])
 
-        print(finallist)
-        context = {
-            'Highscore': finallist
+        # For payment history
+        allPayments = Payment.objects.filter(
+            user__pk=request.user.pk)
 
+        payment = []
+        for i in allPayments:
+            payment.append(i.game.title)
+
+        payment = list(dict.fromkeys(payment))  # remove duplicates
+        amount = []
+        for title in payment:
+            amount.append(allPayments.filter(game__title=title)[0])
+
+        context = {
+            'Highscore': finallist,
+            "Amount": amount,
         }
         return render(request, "profile.html", context=context)
 
