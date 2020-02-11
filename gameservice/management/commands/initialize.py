@@ -24,10 +24,14 @@ class Command(BaseCommand):
         testikayttaja.save()
         testidevaaja.save()
         # kategoriat
-        rpg = Category(name="RPG").save()
-        action = Category(name="Action").save()
-        sport = Category(name="Sport").save()
-        puzzle = Category(name="Puzzle").save()
+        rpg = Category(name="RPG")
+        rpg.save()
+        action = Category(name="Action")
+        action.save()
+        sport = Category(name="Sport")
+        sport.save()
+        puzzle = Category(name="Puzzle")
+        puzzle.save()
 
         # pelit
         testipeli = Game(title="Oma peli", developer=testidevaaja,
@@ -51,6 +55,6 @@ class Command(BaseCommand):
 
         # payment
 
-        payment = Payment(user=developer, price=testipeli.price,
+        payment = Payment(user=testidevaaja, price=testipeli.price,
                           game=testipeli, pid="123", sid="123")
         payment.save()
