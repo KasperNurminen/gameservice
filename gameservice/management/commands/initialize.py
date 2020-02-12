@@ -50,7 +50,6 @@ class Command(BaseCommand):
         # score
         score1 = Score(player=testikayttaja, score=10, game=testipeli)
         score1.save()
-        score2.save()
 
         # payment
 

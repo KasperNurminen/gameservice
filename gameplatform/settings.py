@@ -25,7 +25,7 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 SECRET_KEY = 'ehu0s#0dufoz)4kzp*a7m=(r_nn!#z+3y6b&25w0u5d_h5z3l^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -147,6 +147,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 LOGOUT_REDIRECT_URL = "/login"
 
 if "DYNO" in os.environ:
+    DEBUG = False
     STATIC_ROOT = 'staticfiles'
     SECRET_KEY = os.environ.get('SECRET_KEY')
     import dj_database_url
