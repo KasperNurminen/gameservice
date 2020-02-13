@@ -41,7 +41,25 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col">
+        <h2> Payment history</h2>
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>Game</th>
+                <th>Price</th>
+                <th>Date</th>
+            </tr>
+            {% for amount in Amount %}
+            <tr>
+                <td>{{ amount.game.title }}</td>
+                <td>{{ amount.price }} </td>
+                <td>{{ amount.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
 
-
+    </div>
+</div>
 
 {% endblock %}
