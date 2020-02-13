@@ -4,11 +4,11 @@
 {% block content %}
 {% csrf_token %}
 <div class="row">
-    <div class="col gameBlock" style="margin: 0 20px;">
+    <div class="col gameBlock" style="margin-right: 20px;">
         <h1 class="title">{{game.title}}</h1>
         <iframe src={{game.url}} id="iframe" name="iframe"></iframe>
     </div>
-    <div class="col gameBlock" style="margin-top: 0;">
+    <div class="gameBlock scores">
         <h3 class="title" style="letter-spacing: 0; padding-right: 16px;">High scores:</h3>
         <table id="scores" name="scores[]">
             {% for score in scores %}

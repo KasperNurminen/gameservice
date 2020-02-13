@@ -79,7 +79,6 @@ body {
     background-color: rgb(255, 255, 255);
     padding: 6px;
     min-height: 40vh;
-    margin-top: 2%;
     border-radius: 2%;
     max-width: 48vw;
     margin-bottom: 2%;
@@ -89,7 +88,6 @@ body {
     background-color: rgb(255, 255, 255);
     padding: 14px;
     min-height: 40vh;
-    margin-top: 2%;
     border-radius: 2%;
 }
 
@@ -172,6 +170,7 @@ button:hover {
 
     .gameBlock {
         width: calc(100vw - 16px);
+        margin-right: 0;
     }
 
     .contentBlock {
@@ -185,5 +184,18 @@ button:hover {
 
     .searchForm {
         grid-template-columns: auto;
+    }
+
+    .page-header{
+        display: block;
+        padding: 10px;
+    }
+
+    .scores {
+        margin: 20px;
+    }
+
+    .mTable {
+        max-width: 20px;
     }
 }
