@@ -5,7 +5,7 @@
 <div class="contentBlock">
     <div class="row">
         <h1 class="title">My Games</h1>
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover table-responsive-md">
             <tr>
                 <th>Title</th>
                 <th>Developer</th>
@@ -54,7 +54,7 @@
 
         {% if searched %}
         {% if results %}
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover table-responsive-md">
             <tr>
                 <th>Title</th>
                 <th>Developer</th>
@@ -89,7 +89,8 @@
 <script src="{% static 'js/main.js' %}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        var values = {{ selected_categories|safe }}
+        var values = {{ selected_categories| safe
+    }}
         $('#categories').multiselect({
             nonSelectedText: 'Filter by category',
             buttonWidth: "200px",
