@@ -98,7 +98,6 @@ body {
 
 .title { 
     padding: 12px 0px;
-    letter-spacing: 2;
     font-weight: 400;
 }
 
@@ -115,7 +114,6 @@ a:hover {
 .search {
     font-size: 32px;
     padding-top: 20px;
-    letter-spacing: 1;
 }
 
 /* Search */
